@@ -97,6 +97,7 @@ public class XmlGenerate {
         doc.appendChild(rootElement);
 
         int dayTotal = 1;
+        String optionalData = "COVID";
         
         for ( int i = 1 ; i <= 12 ; i++)
         {
@@ -124,7 +125,7 @@ public class XmlGenerate {
         		attrY.setValue("2021");
         		entry.setAttributeNode(attrY);
      
-        		entry.appendChild(doc.createTextNode(" COVID" + dayTotal + "\t"));
+        		entry.appendChild(doc.createTextNode(optionalData + dayTotal + "\t"));
         		
         		dayTotal++;
         	}
