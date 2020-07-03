@@ -2,23 +2,29 @@ package com.scienceminer.interviewcode;
 
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
 public class Powerset {
+
+	final static Logger logger = Logger.getLogger(Powerset.class);
 
 	public static void  main(String[] args )
 	{
 
 		Powerset ps = new Powerset();
-
 		ArrayList<Integer> inputSetArray = new ArrayList<Integer>();
-		inputSetArray.add(1);
-		inputSetArray.add(2);
-		inputSetArray.add(3);
-		inputSetArray.add(4);
-
+		
+		Integer setLimit = 8;
+		
+		for (int i = 1; i <= setLimit ; i++ ) {
+			inputSetArray.add(i);
+		}
+		
 		ArrayList<ArrayList<Integer>> result = ps.powerset(inputSetArray);
-
-		System.out.println( " RESULT: " + result.toString() );
-
+		
+		logger.info( " RESULT: " + result.toString() );
+		logger.info(" Number of items: " + result.size() );
+		
 	}
 
 
@@ -30,17 +36,17 @@ public class Powerset {
 
 	public ArrayList<ArrayList<Integer>> powerset(ArrayList<Integer> inputSet) {
 
-		System.out.println(" POWERSET: " + inputSet.toString() );
+		logger.debug(" POWERSET: " + inputSet.toString() );
 		
 		if (inputSet.size() > 0 ) {
 			
 			Integer first = inputSet.remove(0); // firstItem 
 			
 			ArrayList<ArrayList<Integer>> powerset = powerset(inputSet);
-			System.out.println(" ABOUT to deep Copy powerset:  " + powerset.toString() );
+			logger.debug(" ABOUT to deep Copy powerset:  " + powerset.toString() );
 			
 			ArrayList<ArrayList<Integer>> powerset2 = deepCopy(powerset);
-			System.out.println(" cloned powerset: " + powerset2.toString() );
+			logger.debug(" cloned powerset: " + powerset2.toString() );
 			
 			ArrayList<ArrayList<Integer>> addedToAll = addToAll(first,powerset2);
 
@@ -77,7 +83,7 @@ public class Powerset {
 
 	public ArrayList<ArrayList<Integer>> addToAll(Integer first,  ArrayList<ArrayList<Integer>> tails  ) {
 
-		System.out.println( ">>>>>>>  addToAll: " + first + " to " + tails.toString() );
+		logger.debug( ">>>>>>>  addToAll: " + first + " to " + tails.toString() );
 
 		for (ArrayList<Integer> inArr : tails ) {
 			inArr.add(first);
