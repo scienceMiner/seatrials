@@ -2,7 +2,7 @@
 
 Contains some useful JAVA utilities. Including:
   1.  LifeDays - calculate the number of days someone has been alive for.
-  2.  
+  2.  Decathlon - for anyone interested in how decathlon results are mapped into points... trust me, its reasonably interesting
   
 Also this repo contains some (mildly) useful JAVA interview questions which are often asked. Including:
   1.  Reversing a line of input - if you type in an input line how would you display this line reversed 
