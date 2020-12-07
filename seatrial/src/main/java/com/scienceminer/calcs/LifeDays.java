@@ -26,6 +26,15 @@ public class LifeDays
 		yearTotal = 0;
 		total = 0;
 	}
+	
+	public String isInterestingDate( int value ) {
+		
+		value = value+1;
+		if ( (value % 50) == 0 ) 
+			return " Value for tomorrow: " + value;
+			
+		return "";
+	}
 
 	public int calculate()
 	{
@@ -92,13 +101,84 @@ public class LifeDays
 	int yearTotal;
 	int total;
 
+   public String checkForInterestingDates() {
 
+	   String interesting = new String();
+	   String overall = new String();
+	   
+		LifeDays ld1 = new LifeDays(1971,30,Calendar.APRIL);
+		int result = ld1.calculate();
+		interesting = ld1.isInterestingDate(result);
+		
+		if (interesting.length() > 0 )
+			overall = overall + "\n ERC:  " + interesting;
+		
+		ld1 = new LifeDays(1972,19,Calendar.JANUARY);
+		result = ld1.calculate();
+		System.out.println("DJN Result:\t" + result);
+
+		interesting = ld1.isInterestingDate(result);
+		
+		if (interesting.length() > 0 )
+			overall = overall + "\n DJN: " + interesting;
+		
+		ld1 = new LifeDays(2003,20,Calendar.APRIL);
+		result = ld1.calculate();
+		System.out.println("ORC Result:\t" + result);
+		interesting = ld1.isInterestingDate(result);
+		
+		if (interesting.length() > 0 )
+			overall = overall + "\n ORC: " + interesting;
+		
+		ld1 = new LifeDays(2005,15,Calendar.JULY);
+		result = ld1.calculate();
+		System.out.println("SIC Result:\t" + result);
+		interesting = ld1.isInterestingDate(result);
+		
+		if (interesting.length() > 0 )
+			overall = overall + "\n SIC: " + interesting;
+		
+		ld1 = new LifeDays(2010,12,Calendar.JULY);
+		result = ld1.calculate();
+		System.out.println("CSC Result:\t" + result);
+
+		interesting = ld1.isInterestingDate(result);
+		
+		if (interesting.length() > 0 )
+			overall = overall + "\n CSC: " + interesting;
+		
+		ld1 = new LifeDays(1930,14,Calendar.AUGUST);
+		result = ld1.calculate();
+		System.out.println("GRC Result:\t" + result);
+
+		interesting = ld1.isInterestingDate(result);
+		
+		if (interesting.length() > 0 )
+			overall = overall + "\n GRC: " + interesting;
+		
+		ld1 = new LifeDays(1932,25,Calendar.OCTOBER);
+		result = ld1.calculate();
+		System.out.println("BEC Result:\t" + result);
+
+		interesting = ld1.isInterestingDate(result);
+		
+		if (interesting.length() > 0 )
+			overall = overall + "\n BEC: " + interesting;
+		
+		
+		if ( overall.length() >0 )
+			return overall;
+		
+		return null;
+		
+   }
 
 	public static void main(String[] args) 
 	{
 
 		LifeDays ld1 = new LifeDays(1971,30,Calendar.APRIL);
 		int result = ld1.calculate();
+		String interesting = ld1.isInterestingDate(result);
 		System.out.println("ERC Result:\t" + result);
 
 		ld1 = new LifeDays(1972,19,Calendar.JANUARY);
@@ -125,6 +205,8 @@ public class LifeDays
 		result = ld1.calculate();
 		System.out.println("BEC Result:\t" + result);
 
+		
+		
 	}
 
 
