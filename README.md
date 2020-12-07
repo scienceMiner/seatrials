@@ -10,4 +10,5 @@ Also this repo contains some (mildly) useful JAVA interview questions which are 
   2.  FizzBuzz - A classic newbie java question - @ Write a program that prints the numbers from 1 to 100. But for multiples of three print "Fizz" instead of the                    number itself and for the multiples of five print "Buzz". 
                  For numbers which are multiples of both three and five print "FizzBuzz".
   3.  Powerset - Generate the set of all sets for a given input set - obviously this is a nice intro to recursion, unfortunately its not PROLOG...
+  4.  Monte Carlo PI simulation - You can simulate random (x, y) points in a 2-D plane with domain as a square of side 1 unit. Imagine a 90 degree quarter circle inside the same domain with the same radius inscribed into the square. We then calculate the ratio of number points that lied inside the quarter circle and total number of generated points multiplying by 4. A common interview puzzler which seeks to determine understanding of basic monte carlo simulation principles.
                  
