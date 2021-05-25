@@ -2,7 +2,12 @@ package com.scienceminer.dinphi;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Controller {
+
+	final static Logger logger = LogManager.getLogger(Controller.class);
 
 	private int _size = 0;
 	private ArrayList<Resource>  _resources;
@@ -76,7 +81,9 @@ public class Controller {
 	}
 
 	private void initialiseAgents(int limit, Controller c ) {
+		
 		_agents = new ArrayList<Agent>(); 
+		
 		for (int i = 1; i <= limit; i++) 
 		{
 			_agents. add(new Agent(i, c) );
@@ -87,24 +94,42 @@ public class Controller {
 
 	public static void main (String[] args)  {
 
-		int limit = 5; 
+		boolean preventDeadlock = false;
+		String arg;
+		int j = 0;
+		while (j < args.length && args[j].startsWith("-")) {
+            arg = args[j++];
 
+            // use this type of check for "deadlock" arg
+            if (arg.equals("-deadlock")) {
+                System.out.println("deadlock mode off");
+                preventDeadlock = true;
+            }
+		}
+		
+		int limit = 5; 
 		Controller c1 = new Controller(limit); 
 		Thread threads[] = new Thread[limit]; 
 		int i = 0; 
 
+		Monitor m = new Monitor();
+		
 		// for each agent kick off a thread 
 		// thread tries to eat by grabbing both left and right - if it can it will 
 		// eat for a random amount of time up to 10 
 		// then enter state THINK for a random amount up to 10 
 		// if resource hasn't eaten for a while it will die 
 		for ( Agent a : c1._agents ) {
+			a.setDeadlockPrevent(preventDeadlock);
 			threads[i] = new Thread(a); 
 			//a.run(); // will execute on current thread! !! 
 			threads [i++].start(); 
-			System.out. println(" --> Next thread: 	" + a.getId() ) ;
+			m.addAgent(a);
+			logger.debug(" --> Next thread: 	" + a.getId() ) ;
 		}
 
+		new Thread(m).start();
+		
 	}
 
 }

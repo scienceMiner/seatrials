@@ -1,17 +1,23 @@
 package com.scienceminer.dinphi;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Agent implements Runnable { 
+
+	final static Logger logger = LogManager.getLogger(Agent.class);
 
 	private int _id; 
 	private State _state; 
 	private Controller _c; 
 	public static Integer MAX_EAT_MULTIPLIER = 1000; 
 	public static Integer THINKING_MULTIPLIER = 500; 
-
+	public Boolean preventDeadlock;
+	
 	Agent(int id, Controller c)  {
 		_id = id ;
 		_c = c;
-		_state = State. THINK; 
+		_state = State.THINK; 
 
 	}
 
@@ -30,6 +36,10 @@ public class Agent implements Runnable {
 	public void setState(State _state) {
 		this._state = _state; 
 	}
+	
+	public void setDeadlockPrevent(Boolean prevent) {
+		this.preventDeadlock = prevent; 
+	}
 
 	@Override 
 	public 
@@ -44,7 +54,7 @@ public class Agent implements Runnable {
 		int leftId = _c.getLeft(this) ; 
 		int rightId = _c.getRight (this) ; 
 		int thinkingCounter = 0; 
-		System.out.println(" ID: "  + _id +  " LEFT ::"  + leftId + 	" RIGHT :: " +  rightId  ) ; 
+		logger.debug(" ID: "  + _id +  " LEFT ::"  + leftId + 	" RIGHT :: " +  rightId  ) ; 
 		while (true) { 	
 			// attempt to acquire LEFT and RIGHT resources 
 			// keep whatever resource you get! 
@@ -54,14 +64,14 @@ public class Agent implements Runnable {
 				{
 					hasLeft = _c. acquireResource (leftId, this); 
 					if (hasLeft) 
-						System.out.println(_id + " has got LEFT RESOURCE: " + leftId); 
+						logger.debug(_id + " has got LEFT RESOURCE: " + leftId); 
 				}
 
 				if (!hasRight) 
 				{
 					hasRight = _c. acquireResource (rightId, this); 
 					if (hasRight) 
-						System.out.println(_id + " has got RIGHT RESOURCE : " + rightId); 
+						logger.debug(_id + " has got RIGHT RESOURCE : " + rightId); 
 				}
 			}	
 
@@ -71,10 +81,10 @@ public class Agent implements Runnable {
 
 			if (hasLeft && hasRight) 
 			{
-				System.out.println( _id + " ACQUIRED RESOURCES " + leftId + " and " + rightId );
+				logger.debug( _id + " ACQUIRED RESOURCES " + leftId + " and " + rightId );
 
 				this.setState (State. EAT) ; 
-				System.out. println( _id + " Eating for a while " );
+				logger.debug( _id + " Eating for a while " );
 
 				try { 
 					Thread.sleep( (long) (Math.random() * Agent.MAX_EAT_MULTIPLIER ));
@@ -82,30 +92,29 @@ public class Agent implements Runnable {
 					throw new RuntimeException(e); 
 				}
 
-				System.out.println( _id + " Finished Eating " );
+				logger.debug( _id + " Finished Eating " );
 
 				hasLeft = _c.dropResource(leftId , this );
 				hasRight = _c.dropResource(rightId, this );
 				this. setState(State. THINK) ; 
 				thinkingCounter = 0;  // just started to think. 
 
-				System.out.println( _id + " DROPPED RESOURCES " + leftId + " and " +rightId );
+				logger.debug( _id + " DROPPED RESOURCES " + leftId + " and " +rightId );
 
 			}
 			else 
 			{
 
 				// holding at most ONE resource so think for a bit 
-				this.
-				setState(State.THINK) ; 
+				this.setState(State.THINK) ; 
 
-				System.out.print( _id + " Thinking for a while " );
+				logger.debug( _id + " Thinking for a while " );
 				if (hasLeft) 
-					System.out.print(" whilst holding left: " + leftId );
+					logger.debug(" whilst holding left: " + leftId );
 				if (hasRight) 
-					System.out.print(" whilst holding right: " + rightId );
+					logger.debug(" whilst holding right: " + rightId );
 
-				System.out.println ( " \t THINKING FOR: " + thinkingCounter );
+				logger.debug( " \t THINKING FOR: " + thinkingCounter );
 
 				try { 
 					Thread.sleep ( (long) (Math. random( )  * Agent.THINKING_MULTIPLIER ));
@@ -117,32 +126,43 @@ public class Agent implements Runnable {
 
 				if (thinkingCounter == 5) 
 				{
-					System.out.println( _id + " Thinking for so long... 	I'm hungry " );
-					this. setState (State. HUNGRY) ; 
+					logger.debug( _id + " Thinking for so long... 	I'm hungry " );
+					this.setState (State.HUNGRY) ; 
 				}
 
 				// so releasing a resource when you 're starving stops deadlock 
 				if (thinkingCounter == 10) 
 				{
-					System.out.println( _id + " Thinking for so long...  starving " );
-					this.setState (State. STARVING) ; 
-					thinkingCounter = 0; 
-					// reset as we are now STARVING and cannot hold any 
-					synchronized (this) { 
-						if (hasLeft) 
-						{
-							System.out.println( _id + " dropping my left " );
-							hasLeft = _c. dropResource (leftId, this); 
-						}
+					logger.debug( _id + " Thinking for so long...  starving " );
+					this.setState (State.STARVING) ; 
+					
+					if (preventDeadlock) 
+					{
+						thinkingCounter = 0; 
 
-						if (hasRight)  
-						{
-							System.out.println( _id + " dropping my right " );
-							hasRight = _c. dropResource (rightId, this) ; 
+						// reset as we are now STARVING and cannot hold any 
+
+						synchronized (this) { 
+							if (hasLeft) 
+							{
+								logger.debug( _id + " dropping my left " );
+								hasLeft = _c. dropResource (leftId, this); 
+							}
+
+							if (hasRight)  
+							{
+								logger.debug( _id + " dropping my right " );
+								hasRight = _c. dropResource (rightId, this) ; 
+							}
+
 						}
 
 					}
-
+					
+					if (thinkingCounter % 100 == 0 )
+					{
+						logger.debug( _id + " MIGHT as well be DEAD:  " + thinkingCounter  );
+					}
 				}
 
 			}
