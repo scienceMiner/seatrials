@@ -36,9 +36,25 @@ public class FizzBuzz {
 
 	}
 	
+	public static boolean isRegionClose(String s) {
+		if (s.equals("EUROPEOPEN")) 
+			return true;
+		
+		return false;
+	}
+	
 	public  static void main(String[] args )
 	{
 		FizzBuzz.process(1,200);
+		
+		String region = "EUROP";
+		if (region.equals("EUROP"))
+			if (isRegionClose("EUROPE")) {
+				System.out.print(" close error ");
+			}
+			else if (isRegionClose(region)) {
+				System.out.print( " region Close - error ");
+			}
 	}
 	
 }

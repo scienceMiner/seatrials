@@ -5,12 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class MonitorMain {
 
-	public static final Logger log4j = Logger.getLogger(MonitorMain.class);
+	public static final Logger log4j = LogManager.getLogger(MonitorMain.class);
 	
 	public static void main(String[] args)
 	{

@@ -3,13 +3,14 @@ package com.scienceminer.mailMonitor;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.scienceminer.calcs.LifeDays;
 
 public class MonitorThread  implements Runnable {
 
-	public static final Logger log4j = Logger.getLogger(MonitorThread.class);
+	public static final Logger log4j = LogManager.getLogger(MonitorThread.class);
 	
 	public MonitorThread()
 	{
@@ -23,7 +24,9 @@ public class MonitorThread  implements Runnable {
 		LifeDays ld = new LifeDays();
 
 		boolean olderFileExists = false;
-		int secondsInDay = 86400;
+	//	int secondsInDay = 86400;
+		int secondsInDay = 4;
+		
 		for( ;; )
 		{
 

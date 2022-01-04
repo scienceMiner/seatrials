@@ -102,7 +102,7 @@ public class Controller {
 
             // use this type of check for "deadlock" arg
             if (arg.equals("-deadlock")) {
-                System.out.println("deadlock mode off");
+                logger.warn("deadlock mode off");
                 preventDeadlock = true;
             }
 		}

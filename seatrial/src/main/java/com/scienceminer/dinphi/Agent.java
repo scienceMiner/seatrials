@@ -13,7 +13,7 @@ public class Agent implements Runnable {
 	public static Integer MAX_EAT_MULTIPLIER = 1000; 
 	public static Integer THINKING_MULTIPLIER = 500; 
 	public Boolean preventDeadlock;
-	
+
 	Agent(int id, Controller c)  {
 		_id = id ;
 		_c = c;
@@ -36,7 +36,7 @@ public class Agent implements Runnable {
 	public void setState(State _state) {
 		this._state = _state; 
 	}
-	
+
 	public void setDeadlockPrevent(Boolean prevent) {
 		this.preventDeadlock = prevent; 
 	}
@@ -135,7 +135,7 @@ public class Agent implements Runnable {
 				{
 					logger.debug( _id + " Thinking for so long...  starving " );
 					this.setState (State.STARVING) ; 
-					
+
 					if (preventDeadlock) 
 					{
 						thinkingCounter = 0; 
@@ -158,12 +158,13 @@ public class Agent implements Runnable {
 						}
 
 					}
-					
-					if (thinkingCounter % 100 == 0 )
-					{
-						logger.debug( _id + " MIGHT as well be DEAD:  " + thinkingCounter  );
-					}
+				}	
+				
+				if (thinkingCounter % 100 == 0 )
+				{
+					logger.debug( _id + " MIGHT as well be DEAD:  " + thinkingCounter  );
 				}
+
 
 			}
 
