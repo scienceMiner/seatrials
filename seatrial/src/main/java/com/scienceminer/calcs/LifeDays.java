@@ -94,6 +94,70 @@ public class LifeDays
 		return total;
 
 	}
+	
+	public int calculate(int inputDay, int inputMonth , int inputYear )
+	{
+		try
+		{
+			yearTotal = 0;
+			total = 0;
+
+			Calendar current = Calendar.getInstance();
+			current.set(Calendar.MONTH,	 inputMonth );
+			current.set(Calendar.DAY_OF_MONTH,		inputDay );
+			current.set(Calendar.YEAR,	inputYear );
+
+			Calendar original = Calendar.getInstance(); 
+			original.set(Calendar.MONTH,	firstMonth );
+			original.set(Calendar.DAY_OF_MONTH,		firstDayOfMonth );
+			original.set(Calendar.YEAR,	firstYear );
+
+			Calendar lastDayinYear = Calendar.getInstance(); 
+			lastDayinYear.set(Calendar.MONTH,	Calendar.DECEMBER);
+			lastDayinYear.set(Calendar.DAY_OF_MONTH,		31 );
+
+			int startYear = original.get(Calendar.YEAR);
+
+			int currentYear = current.get(Calendar.YEAR);	
+
+			while (startYear <= currentYear)
+			{
+				lastDayinYear.set(Calendar.YEAR, startYear);
+				yearTotal = lastDayinYear.get(Calendar.DAY_OF_YEAR);				
+
+				if ((startYear == firstYear) && (startYear != currentYear) )
+				{
+					total = yearTotal + total - original.get(Calendar.DAY_OF_YEAR);
+				}
+				else if (startYear < currentYear )
+				{
+					total = yearTotal + total;
+				}
+				else if (startYear == currentYear && startYear != firstYear )
+				{
+					total = total + current.get(Calendar.DAY_OF_YEAR);
+
+				}
+				else if (startYear == currentYear && startYear == firstYear )
+				{
+					total = total + current.get(Calendar.DAY_OF_YEAR) - original.get(Calendar.DAY_OF_YEAR) ;
+
+				}
+
+				startYear++;
+			}
+
+		}
+		catch (Exception e)
+		{
+			System.out.println("NO class SUCCEEDED\n"  + e +"\n");
+		}
+
+		return total;
+
+	}
+
+	
 
 	int firstYear;
 	int firstDayOfMonth;
@@ -165,6 +229,14 @@ public class LifeDays
 		if (interesting.length() > 0 )
 			overall = overall + "\n BEC: " + interesting;
 		
+		ld1 = new LifeDays(1930,14,Calendar.AUGUST);
+		result = ld1.calculate(10, Calendar.MARCH, 2022);
+		System.out.println("GRC Final Result:\t" + result);
+
+		interesting = ld1.isInterestingDate(result);
+		
+		if (interesting.length() > 0 )
+			overall = overall + "\n GRC Final : " + interesting;
 		
 		if ( overall.length() >0 )
 			return overall;
@@ -197,16 +269,14 @@ public class LifeDays
 		result = ld1.calculate();
 		System.out.println("CSC Result:\t" + result);
 
-		ld1 = new LifeDays(1930,14,Calendar.AUGUST);
-		result = ld1.calculate();
-		System.out.println("GRC Result:\t" + result);
-
 		ld1 = new LifeDays(1932,25,Calendar.OCTOBER);
 		result = ld1.calculate();
 		System.out.println("BEC Result:\t" + result);
 
-		
-		
+		ld1 = new LifeDays(1930,14,Calendar.AUGUST);
+		result = ld1.calculate(10, Calendar.MARCH, 2022);
+		System.out.println("GRC Final Result:\t" + result);
+
 	}
 
 

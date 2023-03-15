@@ -5,81 +5,136 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Powerset {
+public class Powerset implements Cloneable {
 
 	final static Logger logger = LogManager.getLogger("Powerset");
+
+	private ArrayList<ArrayList<Integer>> powerset;
+	private ArrayList<Integer> inputSet;
 
 	public static void  main(String[] args )
 	{
 
-		Powerset ps = new Powerset();
-		ArrayList<Integer> inputSetArray = new ArrayList<Integer>();
-		
-		Integer setLimit = 8;
-		
-		for (int i = 1; i <= setLimit ; i++ ) {
-			inputSetArray.add(i);
+		Powerset ps = new Powerset(8);		
+		Powerset result;
+		try {
+			result = ps.calculate();
+			
+			logger.info( " RESULT: " + result.powerset.toString() );
+			logger.info(" Number of items: " + result.powerset.size() );
+
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		ArrayList<ArrayList<Integer>> result = ps.powerset(inputSetArray);
-		
-		logger.info( " RESULT: " + result.toString() );
-		logger.info(" Number of items: " + result.size() );
+
 		
 	}
 
+	public Powerset( )
+	{
+		
+		inputSet = new ArrayList<Integer>();
+		powerset = new  ArrayList<ArrayList<Integer>>();
 
-	//	Input : [1,2,3]
-	//			add 1 to all powersets of [2,3]	+ all powersets of [2,3] - result [[1,2],[1,2,3],[1],[1,3],  [2],[2,3],[],[3]]
-	//					add 2 to all powersrs of [3] + all powersets of [3]		- result [[2],[2,3],[],[3]]
-	//																			add 3 to all powersets of [] + all powerset of [] - result [[],[3]]
+	}
+
+	public Powerset( Integer input )
+	{		
+
+		inputSet = new ArrayList<Integer>();
+
+		for (int i = 1; i <= input ; i++ ) {
+			inputSet.add(i);
+		} 
+
+		powerset = new  ArrayList<ArrayList<Integer>>();
+
+	}
+
+	
+	public Powerset( Powerset ps )
+	{
+		this.powerset = new ArrayList<ArrayList<Integer>>();
+
+		if  (ps != null ) {
+
+			for ( ArrayList<Integer> singleArray : ps.powerset )
+			{
+				ArrayList<Integer> newSingleArray = new ArrayList<Integer> ();
+				newSingleArray.addAll(singleArray);
+				
+				this.powerset.add(newSingleArray);
+			}
+
+		}
+		
+
+	}
+
+	 
+	 @Override
+	 protected Object clone() throws CloneNotSupportedException {
+		 
+		 Powerset pow = (Powerset) super.clone();
+
+		 pow.powerset = new ArrayList<ArrayList<Integer>>();
+
+		 for ( ArrayList<Integer> singleArray : this.powerset )
+		 {
+			 ArrayList<Integer> newSingleArray = new ArrayList<Integer> ();
+			 newSingleArray.addAll(singleArray);
+
+			 pow.powerset.add(newSingleArray);
+		 }
+
+		 return pow;
+	 }
 
 
-	public ArrayList<ArrayList<Integer>> powerset(ArrayList<Integer> inputSet) {
+	public Powerset calculate() throws CloneNotSupportedException {
 
 		logger.debug(" POWERSET: " + inputSet.toString() );
-		
-		if (inputSet.size() > 0 ) {
-			
+
+		if ( inputSet.size() > 0 ) {
+
 			Integer first = inputSet.remove(0); // firstItem 
 			
-			ArrayList<ArrayList<Integer>> powerset = powerset(inputSet);
-			logger.debug(" ABOUT to deep Copy powerset:  " + powerset.toString() );
+			Powerset powersetInterim = calculate(); // so does power
 			
-			ArrayList<ArrayList<Integer>> powerset2 = deepCopy(powerset);
-			logger.debug(" cloned powerset: " + powerset2.toString() );
+			//Powerset powerset2 = new Powerset(powersetInterim); // deep copy
+			Powerset powerset2 = (Powerset) powersetInterim.clone(); // deep copy via clone
 			
-			ArrayList<ArrayList<Integer>> addedToAll = addToAll(first,powerset2);
+			Powerset addedToAll = addToAll(first,powerset2);
+			powerset.addAll(addedToAll.powerset);
 
-			powerset.addAll(addedToAll);
-		
-			return powerset;
+			return this;
 		}
-		else { // if (inputSet.size() == 0 ) {
-			return new ArrayList<ArrayList<Integer>>();
+		else { 
+			
+			logger.debug(" powersetC, NEW POWERSET " );
+			return new Powerset();
+			
 		}
 
 	}
 	
+
 	public ArrayList<ArrayList<Integer>> deepCopy( ArrayList<ArrayList<Integer>> inputArray ) {
-		
+
 		ArrayList<ArrayList<Integer>> inputClone = new ArrayList<ArrayList<Integer>>();
 
 		for (ArrayList<Integer> singleArray : inputArray )
 		{
 			ArrayList<Integer> newSingleArray = new ArrayList<Integer> ();
-			
+
 			newSingleArray.addAll(singleArray);
 			inputClone.add(newSingleArray);
 		}
-	
+
 		return inputClone;
 	}
 
-	private Integer[][] append(Integer[][] addedToAll, Integer[][] powerset) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 	public ArrayList<ArrayList<Integer>> addToAll(Integer first,  ArrayList<ArrayList<Integer>> tails  ) {
@@ -98,6 +153,24 @@ public class Powerset {
 		return tails;
 
 	}
-	
+
+
+
+	public Powerset addToAll(Integer first,  Powerset tails  ) {
+
+		logger.debug( ">>>>>>>  addToAll: " + first + " to " + tails.toString() );
+
+		for (ArrayList<Integer> inArr : tails.powerset ) {
+			inArr.add(first);
+		}
+
+		// Add the single Integer as its own entry - FATAIL initial mistake was to leave this out - OUCH!!
+		ArrayList<Integer> intArray = new ArrayList<Integer>();
+		intArray.add(first);
+		tails.powerset.add(intArray);
+
+		return tails;
+
+	}
 
 }
