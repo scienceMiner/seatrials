@@ -19,7 +19,7 @@ public class PalindromeDate {
 		
 		public static String zeroPrint(Integer i ) {
 			if (i < 10)
-				return new String("0" + i.toString());
+				return new String("0" + i);
 			else
 				return i.toString();
 		}
