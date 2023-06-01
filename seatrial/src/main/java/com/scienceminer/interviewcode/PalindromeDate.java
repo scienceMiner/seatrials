@@ -59,7 +59,7 @@ public class PalindromeDate {
 					try {
 						
 						System.out.println(" INPUT : " + validDate );		
-						System.out.println(" palin date: " + fdf.parse(validDate).toString());
+						System.out.println(" palindrome date: " + fdf.parse(validDate).toString());
 						
 					}
 					catch (ParseException e) {
