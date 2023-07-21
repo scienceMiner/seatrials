@@ -2,9 +2,9 @@ package com.scienceminer.interviewcode.quickstart;
 
 public class Car implements CarInterface {
 
-    private CarColour colour;
-    private String registration;
-    private Manufacturer make;
+    private final CarColour colour;
+    private final String registration;
+    private final Manufacturer make;
 
     public Car(CarColour colour, String registration, Manufacturer make) {
         this.colour = colour;
