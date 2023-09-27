@@ -10,20 +10,24 @@ public class CarGenerator {
     private static final Random random = new Random();
     public static void main(String[] args) {
 
-        Collection<Car> showroom = new ArrayList<>();
-        for (int i = 0 ; i < 1000000 ; i++ ) {
+        CarStockCollection showroom = new CarStockCollection();
+        //List<Car> showroom = new ArrayList<Car>(100000);
+
+        for (int i = 0 ; i < 100000 ; i++ ) {
             CarColour randomCarColour = getRandomEnumValue(CarColour.class);
             Manufacturer randomCarManufacturer = getRandomEnumValue(Manufacturer.class);
             String registration = generateRandomString();
 
             Car c = new Car(randomCarColour, registration, randomCarManufacturer );
 
+            //System.out.println("Inserting : " + c.toString() );
             showroom.add(c);
         }
 
-        for (Car c: showroom) {
-            System.out.println(c.toString());
-        }
+        System.out.println(showroom.statsString());
+     //   for (Car c: showroom) {
+     //       System.out.println(c.toString());
+     //   }
 
 
         Map<String, ExecutorService> threadPools = new HashMap<>();
