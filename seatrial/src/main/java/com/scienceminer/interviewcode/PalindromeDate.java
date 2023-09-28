@@ -19,7 +19,7 @@ public class PalindromeDate {
 		
 		public static String zeroPrint(Integer i ) {
 			if (i < 10)
-				return new String("0" + i.toString());
+				return new String("0" + i);
 			else
 				return i.toString();
 		}
@@ -59,7 +59,7 @@ public class PalindromeDate {
 					try {
 						
 						System.out.println(" INPUT : " + validDate );		
-						System.out.println(" palin date: " + fdf.parse(validDate).toString());
+						System.out.println(" palindrome date: " + fdf.parse(validDate).toString());
 						
 					}
 					catch (ParseException e) {

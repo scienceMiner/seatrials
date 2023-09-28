@@ -9,6 +9,10 @@ public class Powerset implements Cloneable {
 
 	final static Logger logger = LogManager.getLogger("Powerset");
 
+	public ArrayList<ArrayList<Integer>> getPowerset() {
+		return powerset;
+	}
+
 	private ArrayList<ArrayList<Integer>> powerset;
 	private ArrayList<Integer> inputSet;
 
