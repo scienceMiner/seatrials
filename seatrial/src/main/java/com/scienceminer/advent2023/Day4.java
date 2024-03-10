@@ -16,7 +16,6 @@ public class Day4 {
         Map<Integer, List<Integer>> winMap = new LinkedHashMap<Integer, List<Integer>>();
         Map<Integer, List<Integer>> numMap = new LinkedHashMap<Integer, List<Integer>>();
         Map<Integer, Integer> copies = new LinkedHashMap<>();
-        // Map<IntegerWithCopyMarkers, Integer> matchesPerRow = new LinkedHashMap<>();
         Map<Integer,IntegerWithCopyMarkers> matchesPerRow = new TreeMap<Integer,IntegerWithCopyMarkers>() ;
 
         parseInputToMap(arrList, winMap, numMap, copies);
@@ -38,14 +37,6 @@ public class Day4 {
                 if (winList.contains(i)) {
                     matches = matches + 1;
                 }
-                /*
-                if (winList.contains(i )) {
-                    if (matches == 0)
-                        matches = 1;
-                    else
-                        matches = matches * 2;
-                }
-                */
 
             }
 
@@ -56,10 +47,8 @@ public class Day4 {
         System.out.println(" matchesPerRow: " + matchesPerRow.toString() + " matchesPerRow Size: " + matchesPerRow.size() );
 
         calculateResult(matchesPerRow,copies);
-        //int sum = getSum(matchesPerRow);
-        //System.out.println(" Total : " + sum );
-        System.out.println(" matchesPerRow: " + matchesPerRow.toString() + " matchesPerRow Size: " + matchesPerRow.size() );
 
+        System.out.println(" matchesPerRow: " + matchesPerRow.toString() + " matchesPerRow Size: " + matchesPerRow.size() );
         System.out.println(" matchesPerRow.size() : " + matchesPerRow.size() );
     }
 
@@ -122,36 +111,12 @@ Your one instance of card 6 (one original) has no matching numbers and wins no m
         return sum;
     }
 
-    public static Integer processForMaxCopy( Map<IntegerWithCopyMarkers, Integer > map,
-                                             Integer i ) {
-        int copyNum = 0;
-        Set<IntegerWithCopyMarkers> intSet = map.keySet();
-
-        for (int copyVal = 1; ; copyVal++) {
-        //    System.out.println("check copy for " + i + " coopyVal " + copyVal);
-            if (map.containsKey(new IntegerWithCopyMarkers(i,copyVal)) == false) {
-                return copyVal-1;
-            }
-        }
- /*       for (IntegerWithCopyMarkers integerWithCopyMarkers : intSet ) {
-            if (integerWithCopyMarkers.getId() == i) {
-                if (integerWithCopyMarkers.getIdToMarkCopy() > copyNum)
-                    copyNum = integerWithCopyMarkers.getIdToMarkCopy();
-            }
-        }
-*/
-      //f  return 0; // copyNum;
-    }
-
     public static Integer calculateResult( Map<Integer, IntegerWithCopyMarkers > matchesPerRow,
                                         Map<Integer, Integer > copies )  {
 
     // matchesPerRow: {(0,0)=4, (1,0)=2, (2,0)=2, (3,0)=1, (4,0)=0, (5,0)=0}
-    // System.out.println("matchesPerRow: " + matchesPerRow.toString() );
-    // System.out.println("copies: " + copies );
 
         int total = 0;
-     //   int mapSize = matchesPerRow.size();
 
         Set<Integer> intSet = matchesPerRow.keySet();
 
@@ -162,12 +127,11 @@ Your one instance of card 6 (one original) has no matching numbers and wins no m
             int currentNumberOfCopies = iwcm.getIdToMarkCopy();
             int numberToCopy = iwcm.getId();
 
-         //   System.out.println(" from position " + position + " add " + numberToCopy );
-            for (int i = 1 ; i <= numberToCopy ; i++) {
+           for (int i = 1 ; i <= numberToCopy ; i++) {
                 IntegerWithCopyMarkers iwcmLocal = matchesPerRow.get(position+i);
                 matchesPerRow.replace(position+i, new IntegerWithCopyMarkers(iwcmLocal.getId(),iwcmLocal.getIdToMarkCopy()+currentNumberOfCopies));
             }
-         //   System.out.println(" matchesPerRow: " + matchesPerRow.toString() + " matchesPerRow Size: " + matchesPerRow.size() );
+            //   System.out.println(" matchesPerRow: " + matchesPerRow.toString() + " matchesPerRow Size: " + matchesPerRow.size() );
 
             IntegerWithCopyMarkers iMarkersToAdd = ((IntegerWithCopyMarkers) matchesPerRow.get(position));
             totalVal = totalVal + iMarkersToAdd.getIdToMarkCopy();
