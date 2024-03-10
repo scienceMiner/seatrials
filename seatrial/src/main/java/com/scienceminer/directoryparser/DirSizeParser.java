@@ -1,9 +1,8 @@
 package com.scienceminer.directoryparser;
 
-import java.io.BufferedReader;
+import main.java.com.scienceminer.utils.FileUtils;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,7 +146,7 @@ class Node {
 public class DirSizeParser {
 
 	public static void main(String[] args) throws IOException {
-		ArrayList<String> arrList  = readFileToArrayList("/dirParserInput.txt");
+		ArrayList<String> arrList  = FileUtils.readFileToArrayList("/dirParserInput.txt");
 		// printTree(root, 0);
 		int count = 0;
 		Node root = new Node("root",FileType.DIR);
@@ -203,22 +202,6 @@ public class DirSizeParser {
 		int result = root.sumDirSizes(total);
 		System.out.println(" Answer: " + result );
 		
-	}
-
-	public static ArrayList<String> readFileToArrayList(String filePath) {
-		ArrayList<String> arrList = new ArrayList<>();
-
-		try (InputStream inputStream = DirSizeParser.class.getResourceAsStream(filePath);
-				BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				arrList.add(line);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return arrList;
 	}
 
 

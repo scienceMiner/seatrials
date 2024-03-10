@@ -1,6 +1,8 @@
 package com.scienceminer.utils;
 
-import java.io.File;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,10 +13,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import java.io.File;
 
 public class XmlGenerate {
 
@@ -114,7 +113,7 @@ public class XmlGenerate {
                 rootElement.appendChild(entry);
                 
         		Attr attr1 = doc.createAttribute("day");
-        		attr1.setValue(new Integer(j).toString() );
+        		attr1.setValue(Integer.valueOf(j).toString() );
         		entry.setAttributeNode(attr1);
      
         		Attr attr = doc.createAttribute("month");
@@ -122,7 +121,7 @@ public class XmlGenerate {
         		entry.setAttributeNode(attr);
      
         		Attr attrY = doc.createAttribute("year");
-        		attrY.setValue("2023");
+        		attrY.setValue("2025");
         		entry.setAttributeNode(attrY);
      
         		// entry.appendChild(doc.createTextNode(optionalData + dayTotal + "\t"));
