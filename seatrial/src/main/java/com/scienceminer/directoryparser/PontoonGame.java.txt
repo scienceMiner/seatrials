@@ -1,0 +1,204 @@
+package com.scienceminer.directoryparser;
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+public class PontoonGame extends Application {
+    private static final int CARD_WIDTH = 100;
+    private static final int CARD_HEIGHT = 140;
+
+    private List<Card> deck;
+    private List<Card> playerHand;
+    private List<Card> dealerHand;
+
+    private ImageView dealerCard1;
+    private ImageView dealerCard2;
+    private ImageView playerCard1;
+    private ImageView playerCard2;
+    private Label dealerScoreLabel;
+    private Label playerScoreLabel;
+    private Button hitButton;
+    private Button standButton;
+    private Button resetButton;
+
+    private int dealerScore;
+    private int playerScore;
+
+    @Override
+    public void start(Stage primaryStage) {
+        deck = createDeck();
+        playerHand = new ArrayList<>();
+        dealerHand = new ArrayList<>();
+
+        dealerCard1 = new ImageView();
+        dealerCard2 = new ImageView();
+        playerCard1 = new ImageView();
+        playerCard2 = new ImageView();
+        dealerScoreLabel = new Label("Dealer: ");
+        playerScoreLabel = new Label("Player: ");
+        hitButton = new Button("Hit");
+        standButton = new Button("Stand");
+        resetButton = new Button("Reset");
+
+        resetGame();
+
+        hitButton.setOnAction(e -> {
+            dealCardToPlayer();
+            updatePlayerScore();
+            if (playerScore > 21) {
+                endGame("Bust! You lose.");
+            }
+        });
+
+        standButton.setOnAction(e -> {
+            while (dealerScore < 17) {
+                dealCardToDealer();
+                updateDealerScore();
+            }
+
+            if (dealerScore > 21 || playerScore > dealerScore) {
+                endGame("You win!");
+            } else if (dealerScore > playerScore) {
+                endGame("You lose.");
+            } else {
+                endGame("It's a tie.");
+            }
+        });
+
+        resetButton.setOnAction(e -> resetGame());
+
+        HBox buttonBox = new HBox(hitButton, standButton, resetButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setSpacing(10);
+
+        VBox dealerBox = new VBox(dealerCard1, dealerCard2, dealerScoreLabel);
+        dealerBox.setAlignment(Pos.CENTER);
+        dealerBox.setSpacing(10);
+
+        VBox playerBox = new VBox(playerCard1, playerCard2, playerScoreLabel);
+        playerBox.setAlignment(Pos.CENTER);
+        playerBox.setSpacing(10);
+
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(10));
+        root.setTop(dealerBox);
+        root.setCenter(playerBox);
+        root.setBottom(buttonBox);
+
+        Scene scene = new Scene(root, 600, 400);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Pontoon");
+        primaryStage.show();
+    }
+
+    private List<Card> createDeck() {
+        List<Card> deck = new ArrayList<>();
+        for (Rank rank : Rank.values()) {
+            for (Suit suit : Suit.values()) {
+                deck.add(new Card(rank, suit));
+            }
+        }
+        Collections.shuffle(deck);
+        return deck;
+    }
+
+    private void resetGame() {
+        deck = createDeck();
+        playerHand.clear();
+        dealerHand.clear();
+        dealerCard1.setImage(new Image(getClass().getResource("card_back.png").toExternalForm()));
+        dealerCard2.setImage(null);
+        playerCard1.setImage(null);
+        playerCard2.setImage(null);
+        dealerScoreLabel.setText("Dealer: ");
+        playerScoreLabel.setText("Player: ");
+        hitButton.setDisable(false);
+        standButton.setDisable(false);
+        resetButton.setDisable(true);
+        dealerScore = 0;
+        playerScore = 0;
+        }
+    
+    private void dealCardToDealer() {
+        Card card = deck.remove(0);
+        dealerHand.add(card);
+        if (dealerHand.size() == 1) {
+            dealerCard1.setImage(new Image(getClass().getResource(card.getImageFileName()).toExternalForm()));
+        } else {
+            dealerCard2.setImage(new Image(getClass().getResource(card.getImageFileName()).toExternalForm()));
+        }
+    }
+
+    private void dealCardToPlayer() {
+        Card card = deck.remove(0);
+        playerHand.add(card);
+        if (playerHand.size() == 1) {
+            playerCard1.setImage(new Image(getClass().getResource(card.getImageFileName()).toExternalForm()));
+        } else {
+            playerCard2.setImage(new Image(getClass().getResource(card.getImageFileName()).toExternalForm()));
+        }
+    }
+
+    private void updateDealerScore() {
+        dealerScore = calculateScore(dealerHand);
+        dealerScoreLabel.setText("Dealer: " + dealerScore);
+    }
+
+    private void updatePlayerScore() {
+        playerScore = calculateScore(playerHand);
+        playerScoreLabel.setText("Player: " + playerScore);
+    }
+
+    private int calculateScore(List<Card> hand) {
+        int score = 0;
+        boolean hasAce = false;
+        for (Card card : hand) {
+            if (card.getRank() == Rank.ACE) {
+                hasAce = true;
+            }
+            score += card.getValue();
+        }
+        if (hasAce && score <= 11) {
+            score += 10;
+        }
+        return score;
+    }
+
+    private void endGame(String message) {
+        hitButton.setDisable(true);
+        standButton.setDisable(true);
+        resetButton.setDisable(false);
+        dealerCard2.setImage(new Image(getClass().getResource(dealerHand.get(1).getImageFileName()).toExternalForm()));
+        updateDealerScore();
+        while (dealerScore < 17) {
+            dealCardToDealer();
+            updateDealerScore();
+        }
+        Label resultLabel = new Label(message);
+        VBox resultBox = new VBox(resultLabel);
+        resultBox.setAlignment(Pos.CENTER);
+        resultBox.setSpacing(10);
+        BorderPane root = (BorderPane) hitButton.getScene().getRoot();
+        root.setCenter(resultBox);
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+

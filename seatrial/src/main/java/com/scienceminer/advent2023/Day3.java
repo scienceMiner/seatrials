@@ -3,7 +3,7 @@ package com.scienceminer.advent2023;
 
 import com.scienceminer.utils.Coordinate;
 import com.scienceminer.utils.NumCharUtils;
-import main.java.com.scienceminer.utils.FileUtils;
+import com.scienceminer.utils.FileUtils;
 
 import java.util.*;
 

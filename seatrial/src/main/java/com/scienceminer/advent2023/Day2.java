@@ -1,7 +1,7 @@
 package com.scienceminer.advent2023;
 
 
-import main.java.com.scienceminer.utils.FileUtils;
+import com.scienceminer.utils.FileUtils;
 
 import java.util.ArrayList;
 

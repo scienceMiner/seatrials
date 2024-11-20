@@ -4,7 +4,7 @@ package com.scienceminer.advent2023;
 import com.scienceminer.datastructures.LinkedListy;
 import com.scienceminer.datastructures.Node;
 import com.scienceminer.interviewcode.IntegerWithCopyMarkers;
-import main.java.com.scienceminer.utils.FileUtils;
+import com.scienceminer.utils.FileUtils;
 
 import java.util.*;
 
