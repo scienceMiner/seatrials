@@ -3,6 +3,7 @@ package com.scienceminer.interviewcode.quickstart;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,11 +25,6 @@ public class CarGenerator {
             showroom.add(c);
         }
 
-        System.out.println(showroom.statsString());
-     //   for (Car c: showroom) {
-     //       System.out.println(c.toString());
-     //   }
-
 
         Map<String, ExecutorService> threadPools = new HashMap<>();
         threadPools.put(Manufacturer.TESLA.getName(), Executors.newSingleThreadExecutor(new NamedThreadFactory(Manufacturer.TESLA.getName())));
@@ -43,11 +39,19 @@ public class CarGenerator {
             manufacturerThreadPool.execute(new CarProcessor(car));
         }
 
+
         // Shutdown all thread pools when done
         for (ExecutorService pool : threadPools.values()) {
+            System.out.println("shutdown" + pool.toString());
             pool.shutdown();
+
+            while (!pool.isTerminated()) {
+                // do nothing
+                // wait for termination, better ways to do this
+            }
         }
 
+        System.out.println(showroom.statsString());
 
     }
     public static Car generateRandomCar() {

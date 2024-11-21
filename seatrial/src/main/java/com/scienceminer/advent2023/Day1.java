@@ -3,9 +3,9 @@ package com.scienceminer.advent2023;
 
 import com.scienceminer.utils.NumCharUtils;
 import com.scienceminer.utils.FileUtils;
+import com.scienceminer.utils.enums.Num;
 
 import java.util.ArrayList;
-
 
 
 public class Day1 {
@@ -21,12 +21,15 @@ public class Day1 {
         int result = 0;
 
         for (String s : arrList) {
+
             String firstS = new String(s);
             String lastS = new String(s);
             String testS = new String(s);
+
             String s1 = Day1.convert(firstS);
             String s2 = Day1.convertLast(lastS);
             String s3 = Day1.convert(testS);
+
             Integer firstNum = Day1.findFirstNum(s1);
             //System.out.println( "  firstNum is: " + firstNum );
             Integer lastNum = Day1.findLastNum(s2);
@@ -138,19 +141,6 @@ public class Day1 {
     }
 
 
-        public enum Num {
 
-            ONE("one"), TWO("two"), THREE("three"), FOUR("four"), FIVE("five"),
-            SIX("six"), SEVEN("seven"), EIGHT("eight"), NINE("nine") ;
-
-            private String number;
-
-            private Num(String nu) {
-                this.number = nu;
-            }
-            public String getNum() {
-                return this.number;
-            }
-        }
 
 }

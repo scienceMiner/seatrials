@@ -1,6 +1,6 @@
 package com.scienceminer.directoryparser;
 
-import main.java.com.scienceminer.utils.FileUtils;
+import com.scienceminer.utils.FileUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
