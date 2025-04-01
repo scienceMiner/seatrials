@@ -121,7 +121,7 @@ public class XmlGenerate {
         		entry.setAttributeNode(attr);
      
         		Attr attrY = doc.createAttribute("year");
-        		attrY.setValue("2025");
+        		attrY.setValue("2026");
         		entry.setAttributeNode(attrY);
      
         		// entry.appendChild(doc.createTextNode(optionalData + dayTotal + "\t"));
